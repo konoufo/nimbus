@@ -1,6 +1,8 @@
 {% extends "site_base.html" %}
 
-{% load i18n %}
+{% load static from staticfiles %}
+{% load render_bundle from webpack_loader %}
+
 
 {% block head_title %}Accueil{% endblock %}
 
@@ -31,3 +33,44 @@
         </div>
     </section>
 {% endblock body_base %}
+
+
+  {% block style %}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  {% endblock %}
+
+
+  {% block scripts %}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAo_PT60oc_CGiUYJcI4gsYYa5UGZSBxp8&libraries=geometry,places&language=en-US"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.fr,Intl.~locale.en"></script>
+
+    {% block hydration_data %}
+      <script>
+      {% if initial_data %}
+       window.initialData = {{initial_data | safe}};
+      {% endif %}
+      </script>
+    {% endblock hydration_data %}
+
+      <!-- This script adds the Roboto font to our project. For more details go to this site:  http://www.google.com/fonts#UsePlace:use/Collection:Roboto:400,300,500 -->
+      <script>
+        var WebFontConfig = {
+          google: { families: [ 'Roboto:400,300,500:latin',] }
+        };
+        (function() {
+          var wf = document.createElement('script');
+          wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+          '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+          wf.type = 'text/javascript';
+          wf.async = 'true';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(wf, s);
+        })();
+      </script>
+
+
+    {% block bundle_js %}
+      {% render_bundle 'user_app' 'js' %}
+    {% endblock bundle_js %}
+  {% endblock %}

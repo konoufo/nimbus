@@ -2,7 +2,7 @@
 # Python builds #
 #################
 *.pyc
-node_modules/
+node_modules/**
 _build/
 dev.db
 site_media/
