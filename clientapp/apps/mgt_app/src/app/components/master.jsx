@@ -1,50 +1,70 @@
 import React from 'react';
 // mui
-import SnackBar from 'material-ui/Snackbar';
+import SnackBar from 'material-ui/lib/Snackbar';
+
+import demoApp from './demoApp.jsx';
+import FormsyText from 'apps/utils_forms/input_components/FormsyText';
+const Formsy = FormsyText.Formsy;
+import {sendRequest} from 'apps/utils_forms/mixins/async-request-mixin';
+import LoadingComponent from 'apps/utils_subpage/loading-component';
 // styles
-import Colors from 'material-ui/styles/colors';
-import ThemeManager from 'material-ui/styles/theme-manager';
-import DefaultRawTheme from 'material-ui/styles/raw-themes/light-raw-theme';
+import Colors from 'material-ui/lib/styles/colors';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import DefaultRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 
-export default class Master extends React.Component {
 
-  constructor (props) {
-  	super(props);
-    let muiTheme = ThemeManager.getMuiTheme(DefaultRawTheme);
-    // To switch to RTL...
-    // muiTheme.isRtl = true;
-    this.state = {
-      muiTheme,
-      cookiesAccepted: true,
-    };
-  }
+export default React.createClass({
 
-  static childContextTypes = {
+  childContextTypes: {
     muiTheme: React.PropTypes.object,
     locale: React.PropTypes.string,
-  };
+  },
 
-  getChildContext() {
+  getChildContext: function getChildContext() {
     return {
       muiTheme: this.state.muiTheme,
       locale: 'fr-FR',
     };
-  }
+  },
 
-  acceptCookie = () => {
+  getInitialState: function getInitialState(){
+    let muiTheme = ThemeManager.getMuiTheme(DefaultRawTheme);
+    return {
+      muiTheme,
+      cookiesAccepted: true,
+    };
+  },
+
+  componentWillMount: function componentWillMount(){
+    this.setState(window.initialData);
+
+    this.sendRequest = sendRequest.bind(this);
+  },
+
+  acceptCookie: function() {
   	this.setState({cookiesAccepted: true});
-  }
+  },
 
-  nop = () => {}
+  onGeoUpdate: function onGeoUpdate(suggest, label, id){
+    let state = {};
+    state[id] = suggest;
+    this.setState(state);
+    
+  },
 
-  render() {
+  addNewStop: function addNewStop() {
+    _self = this;
+    if (!this.state.from || !this.state.to) return;
+    suggest = this.state.from;
+    model = {actionUrl: '/r/dispatch/'};
+    model['from'] = `{lat: "${suggest.location.lat}", lng: "${suggest.location.lng}"}`;
+    suggest = this.state.to;
+    model['to'] = `{lat: "${suggest.location.lat}", lng: "${suggest.location.lng}"}`;
+    this.sendRequest(model, function(res){_self.setState(res)});
+  },
+
+  render: function render() {
   	let styles = { 
-  		footer: {
-	        backgroundColor: Colors.grey900,
-	        marginTop: 20,
-	        padding: '3em 0',
-	        textAlign: 'center',
-	    },
     	a: {
         	color: Colors.darkWhite,
     	},
@@ -57,7 +77,7 @@ export default class Master extends React.Component {
     };
   	return (
   		<div style={{width: '100%'}} >
-  			{!this.state.cookiesAccepted && 
+  			{/*!this.state.cookiesAccepted && 
   				<SnackBar
   					message={<p>Cette page utilise des cookies. <a href="#">En savoir plus</a></p>}
   					style={{width: '100%'}}
@@ -65,11 +85,28 @@ export default class Master extends React.Component {
   					openOnMount={true}
   					onActionTouchTap={this.acceptCookie}
   					onRequestClose={this.nop}
-  				/>}
+  				/>*/}
   			<div class="row" >
-
-  			</div>
+          <div class="col-md-12">
+            <div class="col-sm-4">
+              Bus: {this.state.Items.length}
+            </div>
+            <div class="col-sm-4">
+              Requêtes: 
+            </div>
+            <div class="col-sm-4">
+              <span class="hidden-xs">Temps gagné:</span> 0 minute(s)
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div id="mapDemo">
+            </div>
+          </div>
+          <FlatButton label="Démo" />
         </div>
+        {this.state.submitStatus === 'pending' ? <LoadingComponent /> :
+        <demoApp open={this.state.demoOpen} onGeoUpdate={this.onGeoUpdate} addNewStop={this.addNewStop} />}
+      </div>
   	)
-  }
-}
+  },
+})

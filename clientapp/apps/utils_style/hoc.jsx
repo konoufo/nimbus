@@ -1,6 +1,6 @@
 import React from 'react';
 var _simpleAssign = require('simple-assign');
-import withWidth, {MEDIUM, LARGE} from 'material-ui/utils/withWidth';
+import withWidth, {MEDIUM, LARGE} from 'material-ui/lib/utils/withWidth';
 
 
 /*

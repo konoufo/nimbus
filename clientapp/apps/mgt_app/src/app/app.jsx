@@ -5,9 +5,9 @@ import useRouterHistory from 'react-router/lib/useRouterHistory';
 const runApp = function () {
   let React = require('react');
   let ReactDOM = require('react-dom');
-  let AppRoutes = require('./app-routes.jsx');
+  //let AppRoutes = require('./app-routes.jsx');
   let injectTapEventPlugin = require('react-tap-event-plugin');
-
+  let Master = require('./components/master.jsx');
   
 
   //Helpers for debugging
@@ -35,14 +35,9 @@ const createAppHistory = useRouterHistory(createHashHistory);
 
 const appHistory = createAppHistory();
 
-ReactDOM.render(
-  <Router
-    history={appHistory}
-    onUpdate={() => window.scrollTo(0, 0)}
-  >
-    {AppRoutes}
-  </Router>
-, document.getElementById('app'));
+/*ReactDOM.render(
+  <Master />
+, document.getElementById('app'));*/
 
 
 };

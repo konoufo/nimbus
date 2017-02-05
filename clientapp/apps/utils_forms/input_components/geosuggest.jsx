@@ -153,7 +153,7 @@ class Geosuggest extends React.Component {
 
     var options = {
       input: this.state.userInput,
-      language: 'en-GB',
+      language: 'fr-CA',
     };
 
     if (this.props.location) {
@@ -354,22 +354,15 @@ class Geosuggest extends React.Component {
           return component && component.long_name;
         };
         
-        suggest.country = findComponent(gmaps,'country');
-        suggest.state = findComponent(gmaps,'administrative_area_level_1');
+        // suggest.country = findComponent(gmaps,'country');
+        /*suggest.state = findComponent(gmaps,'administrative_area_level_1');
         suggest.city = findComponent(gmaps, 'administrative_area_level_3') || findComponent(gmaps, 'locality');
-        console.log('country: '+suggest.country+'; state: '+suggest.state+'; city: '+suggest.city);
+        console.log('country: '+suggest.country+'; state: '+suggest.state+'; city: '+suggest.city)*/
         
         suggest.location = {
           lat: location.lat(),
           lng: location.lng()
         };
-
-        console.log(suggest.country);
-        if (suggest.country.toLowerCase() != 'canada' &&
-          suggest.country.toLowerCase() != 'united states'){
-          address = suggest.city + ', ' + suggest.country;
-          suggest.state = '';
-        }
         this.props.onSuggestSelect(suggest, address, this.props.ref);
         //this.props.onSuggestSelect(suggest);
       }.bind(this)
@@ -434,14 +427,14 @@ Geosuggest.defaultProps = {
   ref:'geosuggestInput',
   fixtures: [],
   initialValue: '',
-  placeholder: 'Search places',
+  placeholder: 'Trouver une adresse',
   disabled: false,
   className: '',
   location: null,
   radius: null,
   bounds: null,
   country: null,
-  types: null,
+  types: ["(address)"],
   googleMaps: null,
   onSuggestSelect: () => {},
   onFocus: () => {},

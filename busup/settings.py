@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os, dj_database_url
 from django.utils.translation import ugettext_lazy as _
 
-from busup.local_settings import PRODUCTION, DATABASES
+from busup.local_settings import PRODUCTION, DATABASES, WEBPACK_STATS
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
     "social.apps.django_app.default",
+    "webpack_loader",
 
     # project
     "busup",
@@ -208,6 +209,15 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+# Webpack Loader
+
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/', # ends with a slash
+        'STATS_FILE': WEBPACK_STATS,
+    }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

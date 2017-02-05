@@ -28,9 +28,9 @@ class Vehicle(models.Model):
         return {
             'Name': self.name,
             'StartLocation': {
-                'LatLng': {
-                    'Lat': self.lat,
-                    'Lng': self.lng,
+                'LatLong': {
+                    'latitude': str(float(self.lat)),
+                    'longitude': str(float(self.lng)),
                 }
             }
         }
@@ -62,9 +62,9 @@ class Location(models.Model):
     def generate_json(self):
         return {
             'Name': self.name,
-            'LatLng': {
-                'Lat': self.lat,
-                'Lng': self.lng,
+            'LatLong': {
+                'latitude': str(float(self.lat)),
+                'longitude': str(float(self.lng)),
             }
         }
     def __str__(self):
@@ -76,8 +76,8 @@ class Stop(models.Model):
     tour = models.ForeignKey('routeoptimizer.Tour', related_name='stops')
     type = models.IntegerField(choices=((0, 'midway'), (1, 'start'), (2, 'finish'), (3, 'delivery')), default=0)
     waiting_people = models.IntegerField(default=0)
-    pickupTime1 = models.DateTimeField()
-    pickupTime2 = models.DateTimeField()
+    deliveryTime1 = models.DateTimeField(null=True, blank=True)
+    deliveryTime2 = models.DateTimeField(null=True, blank=True)
 
     @classmethod
     def create_stop(cls, lat, lng, tour, stop_type=0, people=0):
@@ -91,8 +91,9 @@ class Stop(models.Model):
         location = self.location.generate_json()
         location.update({
             'LocationType': self.type,
-            'TimeConstraintArrival': time_str(self.pickupTime1),
-            'TimeConstraintArrival1': time_str(self.pickupTime2),
+            'TimeConstraintArrival': self.deliveryTime1 and time_str(self.deliveryTime1),
+            'TimeConstraintArrival1': self.deliveryTime2 and time_str(self.deliveryTime2),
+            'Priority': int(self.waiting_people/5) if self.waiting_people <= 50 else 10,
         })
         return location
 
@@ -118,12 +119,17 @@ class Tour(models.Model):
             return None
         if payload is None:
             payload = settings.DEFAULT_DISPATCH_REQUEST
-        locations = [loc.json() for loc in self.stops.all()]
-        vehicles = [bus.json() for bus in Vehicle.objects.all()]
+        locations = [loc.generate_json() for loc in self.stops.all()]
+        if not locations:
+            locations = payload['Locations']
+        vehicles = [bus.generate_json() for bus in Vehicle.objects.all()]
         payload.update({'Vehicles': vehicles, 'Locations': locations})
+        print(payload)
         r = requests.post('http://trackservice.trackroad.com/rest/dispatch/{}'.format(key),
                           json=payload)
         print(r.text)
         if r.json().get('Status') == 1:
-            return r.text
+            data = r.json()
+            data.update({'numStops': len(locations)})
+            return data
         return None

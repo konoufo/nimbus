@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="lead center">
-                        {% if not dispatch_data %}
+                        {% if not initial_data %}
                         Pas de données de trajets à afficher.
                         {% else %}
                         Les trajets en cours...
@@ -24,24 +24,40 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <div id="app" style="border: 1px #4FC1E9; margin:auto; min-height: 400px; width:95%">
+                    <div style="border: 1px solid #4FC1E9; margin:auto; min-height: 400px; width:95%">
+                        <div class="row" >
+                              <div class="col-md-12">
+                                <div class="col-sm-4" style="font-weight:500; font-size: 1.6em; color:#4A89DC;">
+                                  Bus: <span id="busNumber"></span>
+                                </div>
+                                <div class="col-sm-4" style="font-weight:500; font-size: 1.6em; color:#4A89DC;">
+                                  Requêtes: <span id="stopNumber"></span>
+                                </div>
+                                <div class="col-sm-4" style="font-weight:500; font-size: 1.6em; color:#8CC152;">
+                                  <span class="hidden-xs">Temps gagné:</span> <span id="timeSaved">0</span> mn(s)
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
+
     </section>
 {% endblock body_base %}
 
 
   {% block style %}
+    {{ block.super }}
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   {% endblock %}
 
 
   {% block scripts %}
+    {{ block.super }}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAo_PT60oc_CGiUYJcI4gsYYa5UGZSBxp8&libraries=geometry,places&language=en-US"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.fr,Intl.~locale.en"></script>
 
@@ -49,7 +65,25 @@
       <script>
       {% if initial_data %}
        window.initialData = {{initial_data | safe}};
+       console.log(window.initialData);
+       $(document).ready(function(){
+           $("#stopNumber").text(window.initialData.numStops);
+           $("#busNumber").text(window.initialData.Items.length);
+           var savedTime = 0;
+           window.initialData.Items.map(function(obj, i){
+                obj.Locations.map(function(loc, j){
+
+                    regularTime = 60;
+                    var lat = loc.LatLong.latitude;
+                    var lng = loc.LatLong.longitude;
+                    savedTime = savedTime + Number(loc.Time) - Number(regularTime);
+                    savedTime = savedTime/60;
+                })
+           })
+           $("#timeSaved").text(savedTime);
+       })
       {% endif %}
+
       </script>
     {% endblock hydration_data %}
 
@@ -71,6 +105,6 @@
 
 
     {% block bundle_js %}
-      {% render_bundle 'user_app' 'js' %}
+      {% render_bundle 'home_app' 'js' %}
     {% endblock bundle_js %}
   {% endblock %}

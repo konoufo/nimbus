@@ -3,7 +3,8 @@ import Route from 'react-router/lib/Route';
 import IndexRoute from 'react-router/lib/IndexRoute';
 
 // Here we define all our pages ReactComponent.
-const Master = require('./components/master');
+const Master = require('./components/master.jsx');
+const demoApp = require('./components/demoApp.jsx');
 
 /* Routes: https://github.com/rackt/react-router/blob/master/docs/api/components/Route.md
  *
@@ -14,7 +15,10 @@ const Master = require('./components/master');
  * handler and its parent handler like so: Paper > Components > Master
  */
 const AppRoutes = (
-  <Route path="/" component={Master} />
+  <Route path="/" component={Master} >
+  	<Route component={demoApp} />
+
+  </Route>
 );
 
 module.exports = AppRoutes;
