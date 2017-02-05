@@ -1,0 +1,21 @@
+#################
+# Python builds #
+#################
+*.pyc
+node_modules/
+_build/
+dev.db
+site_media/
+
+*.pyc
+*__pycache__/**
+
+#################
+# Local assets #
+#################
+staticroot/**
+
+#################
+# Miscellaneous #
+#################
+README.md

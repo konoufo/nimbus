@@ -1,0 +1,9 @@
+{% load static from staticfiles %}
+<link href='{% static "css/site-c179c6a5f4.css" %}' rel='stylesheet' />
+{% include 'bootflat/css.html' %}
+{% block navbar_style %}
+<link href='{% static "css/style_navbar.css" %}' rel='stylesheet' />
+{% endblock %}
+{% block append_style %}
+<link href='{% static "css/style_section.css" %}' rel='stylesheet' />
+{% endblock %}

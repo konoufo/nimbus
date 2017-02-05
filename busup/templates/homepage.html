@@ -1,0 +1,30 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Accueil{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_extra_attributes %}style="#E6E9ED"{% endblock %}
+
+{% block body_base %}
+    <section>
+        <div class="container" style="padding: 100px 0;">
+            <h2 class="text-center">{% blocktrans %}Le bus qu'on connaît... Sur demande.{% endblocktrans %}</h2>
+            <p class="text-center">
+                <a class="btn btn-info" href="" >Commencer</a>
+            </p>
+            {% comment %}
+            {% if not user.is_authenticated %}
+            {% url "account_login" as login_url %}
+            {% url "account_signup" as signup_url %}
+            <p class="text-center">
+                <a href="{{ login_url }}" class="btn btn-primary" style="font-size:21px">Créer un profil</a>
+            </p>
+            {% endif %}
+            {% endcomment %}
+        </div>
+    </section>
+
+{% endblock %}
