@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/home/kevyn/nimbus/nimbusenv/bin/python
 import os
 import sys
 
 if __name__ == "__main__":
+    # sys.path.append("/home/kevyn/nimbus/nimbusenv/bin/python")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "busup.settings")
     try:
         from django.core.management import execute_from_command_line
