@@ -1,0 +1,47 @@
+.navbar-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border: none;
+    border-radius: 0;
+    background-color: rgba(255,255,255,.9);
+    width: 100%;
+    z-index: 2000;
+}
+
+.navbar-custom a.navbar-brand {
+    color: #FC6E51;
+}
+
+.navbar-custom .nav li a {
+    display: block;
+    color: #FC6E51;
+    text-transform: uppercase;
+}
+
+/* OTHER STATES */
+
+.navbar-custom a.navbar-brand:hover, .navbar-custom a.navbar-brand:active {
+    color: #E9573F;
+}
+
+.navbar-custom .nav li a.current, .navbar-custom .nav li a:active {
+    border-bottom: 3px solid #E9573F;
+}
+.navbar-custom .nav li a:focus, .navbar-custom .nav li a:hover {
+    color: #E9573F;
+}
+
+.navbar-custom .nav .btn:hover {
+    background-color: #E9573F;
+    color: #E6E9ED;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 768px) {
+    ul.navbar-nav.pull-right {
+        float: none!important;
+        text-align: center;
+    }
+}

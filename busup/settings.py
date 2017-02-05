@@ -119,11 +119,11 @@ if PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': '',
-            'HOST': '',
+            'NAME': 'busupdb',
+            'HOST': 'localhost',
             'PORT': '5432',
-            'USER': '',
-            'PASSWORD': ''
+            'USER': 'champion',
+            'PASSWORD': 'pretty'
         }
     }
 # Update database configuration with $DATABASE_URL.
@@ -187,7 +187,7 @@ MEDIA_URL = "/media/"
 # Don"t put anything in this directory yourself; store your static files
 # in apps" "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticroot")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 # Static files (CSS, JavaScript, Images)
